@@ -11,7 +11,7 @@ class XHPyEndToEndTests(unittest.TestCase):
     stdout, stderr = p.communicate()
     self.assertEqual(0, p.returncode)
     self.assertEqual(
-      '<div class="baz"><ul><li>0</li><li>1</li><li>2</li></ul></div>\n',
+      b'<div class="baz"><ul><li>0</li><li>1</li><li>2</li></ul></div>\n',
       stdout)
 
 if __name__ == '__main__':

@@ -7,4 +7,4 @@ class :ui:foo(:x:element):
     for b in self.getAttribute('bar'):
       a.appendChild(<li>{b}</li>)
     return a
-print <div class="baz"><ui:foo bar={range(3)} /></div>
+print(<div class="baz"><ui:foo bar={range(3)} /></div>)

@@ -7,8 +7,8 @@ import unittest
 class XHPyPrecompiledTests(unittest.TestCase):
   @classmethod
   def tearDownClass(cls):
-    print
-    print 'Removing generated files:'
+    print()
+    print('Removing generated files:')
     cleanup_path = '{0}/cleanup_tests'.format(os.path.dirname(__file__))
     check_call(cleanup_path)
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
   # We dynamically generate tests based on the files in this directory.
   for filename in os.listdir(os.path.dirname(__file__)):
-    print filename
+    print(filename)
     if not filename.endswith('.py') or filename in ['__init__.py', 'tests.py']:
       continue
     def _test(filename):

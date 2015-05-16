@@ -18,7 +18,7 @@ if __package__ is None:
 from .constants import *
 from .utils import tag2class
 
-from cStringIO import StringIO
+from io import StringIO
 import tokenize
 
 # TODO: support comment tokens inside xhpy_text (e.g. &#187;)
@@ -188,7 +188,7 @@ def xhpy_attribute():
     attr_type_token = tokenize.NUMBER, str(TYPE_OBJECT)
     attr_meta_tokens = list(single_expression())
 
-  _x, attr_name = xhpy_attribute_name().next()
+  _x, attr_name = xhpy_attribute_name().__next__()
 
   if token.id == '=':
     advance('=')
@@ -236,7 +236,7 @@ def xhpy_attribute_decl():
 
 def xhpy_category():
   advance('%')
-  tag_type, tag_name = xhpy_tag_name().next()
+  tag_type, tag_name = xhpy_tag_name().__next__()
   yield tokenize.STRING, "'%%%s'" % tag_name
 
 def xhpy_category_decl():
@@ -276,7 +276,7 @@ def xhpy_child_atom():
     advance('(name)')
   elif token.id == ':':
     advance(':')
-    tag_type, tag_name = xhpy_tag_name().next()
+    tag_type, tag_name = xhpy_tag_name().__next__()
     yield tokenize.OP, '('
     yield tokenize.NUMBER, str(CHILD_ATOM_SPECIFIC)
     yield tokenize.OP, ','
@@ -616,7 +616,7 @@ def nud(self, recursive=False):
   if not recursive:
     yield XHPY_SENTINEL, None
   ignore_whitespace.append(True)
-  tag_type, tag_open_name = xhpy_tag_name().next()
+  tag_type, tag_open_name = xhpy_tag_name().__next__()
   yield tag_type, tag_open_name
   yield tokenize.OP, '('
   for t in xhpy_tag_attrs():
@@ -637,7 +637,7 @@ def nud(self, recursive=False):
       if token.id == '/':
         # close tag found, attempt to match
         advance('/')
-        tag_type, tag_close_name = xhpy_tag_name().next()
+        tag_type, tag_close_name = xhpy_tag_name().__next__()
         if tag_open_name != tag_close_name:
           raise XHPySyntaxError("Expected closing tag </%s>, got </%s>" % (tag_open_name, tag_close_name))
         ignore_whitespace.pop()
@@ -671,7 +671,7 @@ def xhpy_tag_attrs():
   while True:
     if token.id != '(name)' and token.id not in keywords:
       break
-    attr_type, attr_name = xhpy_attribute_name().next()
+    attr_type, attr_name = xhpy_attribute_name().__next__()
     yield tokenize.STRING, '\'%s\'' % attr_name
     yield tokenize.OP, ':'
     advance('=')
@@ -1089,7 +1089,7 @@ def std(self):
     in_xhpy_class.append(False)
   elif token.id == ':':
     advance(':')
-    tag_type, tag_name = xhpy_tag_name().next()
+    tag_type, tag_name = xhpy_tag_name().__next__()
     yield tokenize.NAME, tag_name
     in_xhpy_class.append(True)
   if token.id == '(':
@@ -1354,7 +1354,7 @@ def tokenize_python(program):
     tokenize.NAME: '(name)',
     tokenize.ENDMARKER: '(end)'
   }
-  for t in tokenize.generate_tokens(StringIO(program).next):
+  for t in tokenize.generate_tokens(StringIO(program).__next__):
     t_type, t_value, t_start, t_end, t_line = t
     try:
       if t_type == tokenize.COMMENT and t_start[0] >= 2:
@@ -1451,14 +1451,14 @@ def tokenize_xhpy(program):
 def rewrite(program, debug=False):
   global token, next
   if debug:
-    next_debug_helper = tokenize_collapse_multiple_strings(program).next
+    next_debug_helper = tokenize_collapse_multiple_strings(program).__next__
     def next_debug():
       token = next_debug_helper()
-      print token.id, token.value, token.start, token.end
+      print(token.id, token.value, token.start, token.end)
       return token
     next = next_debug
   else:
-    next = tokenize_collapse_multiple_strings(program).next
+    next = tokenize_collapse_multiple_strings(program).__next__
   token = next()
   # ignore leading whitespace, if any
   if token.id == '(newline)':
@@ -1479,4 +1479,4 @@ def parse(program, debug=False):
 if __name__ == '__main__':
   import sys
   debug = len(sys.argv) > 1 and sys.argv[1] == '-d'
-  print parse(sys.stdin.read(), debug)
+  print(parse(sys.stdin.read().decode(), debug))

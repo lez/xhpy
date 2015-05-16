@@ -9,7 +9,7 @@ if a == b:
   '''
   Checks the bars against the bazes.
   '''
-  print a   # NOTE: don't remove this, it's essential
+  print(a)   # NOTE: don't remove this, it's essential
   # this inner loop does nothing
   if c == d:
     pass

@@ -11,10 +11,10 @@ while True:
     else:
       continue
   except KeyboardInterrupt:
-    print "^C received, shutting down..."
+    print("^C received, shutting down...")
     sys.exit(1)
   except:
-    print "unknown exception received, re-raising..."
+    print("unknown exception received, re-raising...")
     raise
-  print i
-print "three errors, quitting."
+  print(i)
+print("three errors, quitting.")

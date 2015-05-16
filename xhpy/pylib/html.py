@@ -40,7 +40,7 @@ class :xhpy:html-element(:x:primitive):
     buf = '<' + self.tagName
     attributes = self.getAttributes()
     for key in attributes:
-      val = unicode(attributes[key])
+      val = str(attributes[key])
       if val is not None and val is not False:
         buf += ' ' + htmlspecialchars(key) + '="' +\
                      htmlspecialchars(val, True) + '"'

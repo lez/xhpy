@@ -16,7 +16,7 @@ for filename in os.listdir(os.path.dirname(__file__)):
       parser_path = '{0}/../../parser.py'.format(os.path.dirname(__file__))
       p = Popen(['python', parser_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
       py_path = '{0}/{1}'.format(os.path.dirname(__file__), filename)
-      with open(py_path) as f:
+      with open(py_path, 'rb') as f:
         stdout, stderr = p.communicate(input=f.read())
       if filename.startswith('fail_'):
         self.assertNotEqual(0, p.returncode)

@@ -199,11 +199,11 @@ class :x:base(object):
   def __init__(self):
     raise NotImplementedError('not implemented!')
 
-  def __unicode__(self):
+  def __str__(self):
     raise NotImplementedError('not implemented!')
 
-  def __str__(self):
-    return unicode(self).encode('utf-8')
+  def __bytes__(self):
+    return str(self).encode('utf-8')
 
   def appendChild(self, child):
     raise NotImplementedError('not implemented!')
@@ -220,10 +220,10 @@ class :x:base(object):
   @classmethod
   def renderChild(cls, child):
     if isinstance(child, :x:base):
-      return unicode(child)
+      return str(child)
     if isinstance(child, list):
       raise XHPyRenderListException('Can not render list!')
-    return htmlspecialchars(unicode(child))
+    return htmlspecialchars(str(child))
 
 class :x:composable-element(:x:base):
   def _init(self):
@@ -303,7 +303,7 @@ class :x:composable-element(:x:base):
 
   def _flushElementChildren(self):
     ln = len(self._children)
-    for ii in xrange(ln):
+    for ii in range(ln):
       child = self._children[ii]
       if isinstance(child, :x:element):
         while isinstance(child, :x:element):
@@ -334,7 +334,7 @@ class :x:primitive(:x:composable-element):
   def stringify(self):
     pass
 
-  def __unicode__(self):
+  def __str__(self):
     self._flushElementChildren()
     if ENABLE_VALIDATION:
       self._validator.validateChildren(self)
@@ -349,7 +349,7 @@ class :x:element(:x:composable-element):
   of markup.
   """
 
-  def __unicode__(self):
+  def __str__(self):
     that = self
     if ENABLE_VALIDATION:
       self._validator.validateChildren(that)
@@ -363,7 +363,7 @@ class :x:element(:x:composable-element):
       that = that.render()
       while isinstance(that, :x:element):
         that = that.render()
-    return unicode(that)
+    return str(that)
 
 class :x:frag(:x:primitive):
   """
